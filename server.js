@@ -1,39 +1,74 @@
-// Imports Express.js
 const express = require('express');
+const apiRoutes = require('./routes/apiRoutes.js');
+const htmlRoutes = require('./routes/htmlRoutes.js');
+const noteData = require('./db/notes.json');
+const fs = require('fs');
 
-// Imports built-in Node.js package 'path' to resolve path of files that are located on the server
-const path = require('path');
-
-// Imports the feedback router
-const api = require('./develop/routes/index');
-
-// Sets port equal to whatever is in the environmental variable port, or port 3001 if not available
-const PORT = process.env.port || 3001;
-
-// Initializes an instance of Express.js
+// Initialize the app and create a port
 const app = express();
+const PORT = process.env.PORT || 3001;
 
-// Import custom middleware, "cLog"
-app.use(clog);
-
-// Middleware for parsing JSON and urlencoded form data
+// Set up body parsing, static, and route middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', api);
-
-// Middleware to serve up static assets from the public folder
 app.use(express.static('public'));
 
-// GET Route for homepage
-app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
-);
+// localhost:3001/api/
+// app.use('/api', apiRoutes);
+app.get('/api/notes', (req, res) => res.json(noteData));
 
-// Wildcard Route for notes page
-app.get('*/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
-);
 
-app.listen(PORT, () =>
-  console.log(`App listening at http://localhost:${PORT} 🚀`)
-);
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request received to add a note`);
+
+    const { title, text} = req.body;
+
+    if (title && text) {
+        const newNote = {
+            title,
+            text
+        };
+
+        const response = {
+            status: 'success',
+            body: newNote,
+        };
+
+        console.log(response);
+        // res.status(201).json(response);
+        
+        // Obtain existing reviews
+        fs.readFile('./db/notes.json', 'utf8', (err, data) => {
+            // Convert string into JSON object
+            const parsedNotes = JSON.parse(data);
+
+            // Add a new review
+            parsedNotes.push(newNote);
+            console.log(parsedNotes);
+
+          // Write updated notes back to the file
+        fs.writeFile('./db/notes.json', JSON.stringify(parsedNotes, null, 4), (writeErr) =>
+            writeErr ? console.error(writeErr) : console.info('Successfully updated notes!'));
+        });
+    } else {res.status(500).json('Error in posting note');}
+});
+
+
+
+//     const response = {
+//         status: 'success',
+//         body: newNote,
+//     };
+
+//     console.log(response);
+//     res.status(201).json(response);
+//     } else {
+//         res.status(500).json('Error in posting note');
+//     }
+// });
+
+// localhost:3001/
+app.use('/', htmlRoutes);
+
+// Start the server on the port
+app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
