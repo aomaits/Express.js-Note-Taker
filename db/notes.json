@@ -1,12 +1,12 @@
 [
     {
-        "id": "ce2b254a-5207-42fe-8312-707ac861c1c7",
-        "title": "first",
-        "text": "note"
+        "id": "f63955c3-d479-4807-8bef-62555c9be1d9",
+        "title": "New Note ",
+        "text": "Written by the user, this note can be saved for later. "
     },
     {
-        "id": "9c4a3e76-cb0f-4bff-b86f-31baefa2c8d6",
-        "title": "2nd",
-        "text": "second"
+        "id": "d6bb62fa-5999-4075-a46f-018b140a1427",
+        "title": "Add a second note",
+        "text": "and so on! "
     }
 ]
