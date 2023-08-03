@@ -1,10 +1,12 @@
 [
     {
-        "title": "test",
-        "text": "test"
+        "id": "f63955c3-d479-4807-8bef-62555c9be1d9",
+        "title": "New Note ",
+        "text": "Written by the user, this note can be saved for later. "
     },
     {
-        "title": "Abe",
-        "text": "Omaits and family"
+        "id": "d6bb62fa-5999-4075-a46f-018b140a1427",
+        "title": "Add a second note",
+        "text": "and so on! "
     }
 ]

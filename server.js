@@ -2,7 +2,9 @@ const express = require('express');
 const apiRoutes = require('./routes/apiRoutes.js');
 const htmlRoutes = require('./routes/htmlRoutes.js');
 const noteData = require('./db/notes.json');
+const { readAndAppend } = require('./helpers/fsUtils.js')
 const fs = require('fs');
+const { v4:uuidv4 } = require('uuid');
 
 // Initialize the app and create a port
 const app = express();
@@ -15,8 +17,11 @@ app.use(express.static('public'));
 
 // localhost:3001/api/
 // app.use('/api', apiRoutes);
-app.get('/api/notes', (req, res) => res.json(noteData));
+app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/notes.json', 'utf8', (err, data) => {
+        const newNote = JSON.parse(data);
 
+    res.json(newNote)})});
 
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
@@ -24,48 +29,26 @@ app.post('/api/notes', (req, res) => {
     const { title, text} = req.body;
 
     if (title && text) {
-        const newNote = {
+        const addedNote = {
+            id: uuidv4(),
             title,
             text
         };
+        
+        readAndAppend(addedNote, './db/notes.json')
 
         const response = {
             status: 'success',
-            body: newNote,
+            body: addedNote,
         };
 
         console.log(response);
-        // res.status(201).json(response);
-        
-        // Obtain existing reviews
-        fs.readFile('./db/notes.json', 'utf8', (err, data) => {
-            // Convert string into JSON object
-            const parsedNotes = JSON.parse(data);
 
-            // Add a new review
-            parsedNotes.push(newNote);
-            console.log(parsedNotes);
+    return res.status(201).json(response); 
 
-          // Write updated notes back to the file
-        fs.writeFile('./db/notes.json', JSON.stringify(parsedNotes, null, 4), (writeErr) =>
-            writeErr ? console.error(writeErr) : console.info('Successfully updated notes!'));
-        });
     } else {res.status(500).json('Error in posting note');}
+
 });
-
-
-
-//     const response = {
-//         status: 'success',
-//         body: newNote,
-//     };
-
-//     console.log(response);
-//     res.status(201).json(response);
-//     } else {
-//         res.status(500).json('Error in posting note');
-//     }
-// });
 
 // localhost:3001/
 app.use('/', htmlRoutes);
