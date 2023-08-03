@@ -17,7 +17,6 @@ app.use(express.static('public'));
 // app.use('/api', apiRoutes);
 app.get('/api/notes', (req, res) => res.json(noteData));
 
-
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
 
@@ -50,22 +49,19 @@ app.post('/api/notes', (req, res) => {
         fs.writeFile('./db/notes.json', JSON.stringify(parsedNotes, null, 4), (writeErr) =>
             writeErr ? console.error(writeErr) : console.info('Successfully updated notes!'));
         });
+
+
+
+
+//  MORNING OBJECTIVES!!! (1) Try getting the db NOTES.JSON to write correctly to the Note Taker page (API route from the server to the client side...would this be a POST request?) (2) Try to modularize routing? Maybe in office hours? 
+
+
+
+
+
+
     } else {res.status(500).json('Error in posting note');}
 });
-
-
-
-//     const response = {
-//         status: 'success',
-//         body: newNote,
-//     };
-
-//     console.log(response);
-//     res.status(201).json(response);
-//     } else {
-//         res.status(500).json('Error in posting note');
-//     }
-// });
 
 // localhost:3001/
 app.use('/', htmlRoutes);
