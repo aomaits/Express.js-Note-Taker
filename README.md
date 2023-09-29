@@ -3,7 +3,9 @@
 ## Description
 This note taker allows a user to add and delete notes to be stored for future reference. This UT Austin full-stack bootcamp project was primarily focused on joining together a full-stack application and creating the proper HTML and API routing. (As we had not covered databases at the time of this project, a hard-coded js file was used as a "database" for storing objects.)
 
-I ran out of time for this project, but would have liked to have added back-end routing for the deletion of tasks from the task list. I also would have modularized more of the back-end routing.  
+Deployment for this application is no longer maintained. 
+
+I ran out of time for this project, but would have liked to have added back-end routing for the deletion of tasks from the task list. I also would have modularized more of the back-end routing. Instead of doing so, however, I plan to rebuild this application using different technologies.
 
 ## Installation
 No installation necessary.
